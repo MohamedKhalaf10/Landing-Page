@@ -2,14 +2,44 @@
 <hr>
 <br>
 
+## Project Uses
+<hr>
+
+* Add dynamics to the page
+* Scrolls to sections from navigation bar
+* Highlights section in viewport upon scrolling
+
 ## Project Description
 <hr>
 
-* The Navigation bar was built by using ` append `and ` for ` loop.
+### - Creating the Navigation Bar
 
-* The smooth scroll to section on link click was made with using the click event and ` scrollIntoView  ` function with the behaviour set to smooth.
+* Create a fragment
+* Put sections into an array
+* looping over the sections array
+* Create lists
+* Create links
+* Adding text into links using each section's data-nav value
+* Adding the the same section's data-nav value to the links
+* Add 'menu__link' class to the links
+* Append links to lists
+* Append lists to the fragment
+* Append the fragment to the Ul
+* Add lists into the unordered list tag
 
-* Adding active class to both the links and the sections was achived with using Intersection Observer API method to set the place of the section and looping over it with forEach loop, also, making the code running into a conditional ` if ` to set the the sections and links to add or remove active class.
+### - Scroll to anchor ID using scrollTO event
 
+* Put links into an array
+* Looping over links array
+* Add click event listner to the links
+* Looping over sections array
+* Scroll to sections smoothly on links click 
 
+### - Add class 'active' to section when near top of viewport
 
+* Create scroll event listener
+* Looing over sections array
+* Set a variable for the value of the element position
+* Add or Remove active class to sections
+* Looping over links array
+* Add or Remove active class to links

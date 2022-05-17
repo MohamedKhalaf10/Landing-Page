@@ -1,140 +1,115 @@
 /**
- * 
+ *
  * Manipulating the DOM exercise.
  * Exercise programmatically builds navigation,
  * scrolls to anchors from navigation,
  * and highlights section in viewport upon scrolling.
- * 
+ *
  * Dependencies: None
- * 
+ *
  * JS Version: ES2015/ES6
- * 
+ *
  * JS Standard: ESlint
- * 
-*/
+ *
+ */
 
 /**
  * Comments should be present at the beginning of each procedure and class.
  * Great to have comments before crucial code sections within the procedure.
-*/
+ */
 
 /**
  * Define Global Variables
- * 
-*/
-const navUl = document.getElementById('navbar__list');
+ *
+ */
 
+// Put nav ul into a variable
+const navUl = document.getElementById("navbar__list");
+
+// Create a fragment
 const navFragment = document.createDocumentFragment();
 
-// Putting sections into variables
-
-const sec1 = document.getElementById('section1');
-const sec2 = document.getElementById('section2');
-const sec3 = document.getElementById('section3');
-const sec4 = document.getElementById('section4');
-
-const options = {
-
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.63
-};
-
-
-
-
-/**
- * End Global Variables
- * Start Helper Functions
- * 
-*/
-
-
-
-/**
- * End Helper Functions
- * Begin Main Functions
- * 
-*/
+// Put sections into an array
+const sections = [...document.querySelectorAll("section")];
 
 // build the nav
 
-for( let i = 1; i <= 4; i++ ) {
-const newLi = document.createElement('li');
-const newLink = document.createElement('a');
-let sectionId = `section${i}`;
+// looping over the sections array
+for (const section of sections) {
+  // Create lists
+  const newList = document.createElement("li");
 
-newLink.innerHTML = document.getElementById(sectionId).getAttribute('data-nav');
-newLink.setAttribute("data-nav", `Section ${i}`);
-newLink.classList.add('menu__link') ;
+  // Create links
+  const newLink = document.createElement("a");
 
-newLi.append(newLink);
-navFragment.append(newLi);
+  // Adding text into links using each section's data-nav value
+  newLink.innerHTML = section.getAttribute("data-nav");
+
+  // Adding the the same section's data-nav value to the links
+  newLink.setAttribute("data-nav", section.getAttribute("data-nav"));
+
+  // Add 'menu__link' class to the links
+  newLink.classList.add("menu__link");
+
+  // Append links to lists
+  newList.appendChild(newLink);
+  // Append lists to the fragment
+  navFragment.appendChild(newList);
 }
-navUl.append(navFragment);
+// Append the fragment to the Ul
+navUl.appendChild(navFragment);
 
-
-// Add class 'active' to section when near top of viewport
-
-const callback = function(element) {
-    const links = document.querySelectorAll('a');
-
-    if(element[0].isIntersecting === true) {
-
-        element[0].target.classList.add('your-active-class');
-        links.forEach (function(link){
-            if ( link.textContent === element[0].target.getAttribute('data-nav') ){
-                link.classList.add('active');
-            }
-            else{
-                link.classList.remove('active');
-            }
-        });
-    }
-    else {
-        element[0].target.classList.remove('your-active-class');
-    }
-};
-
-
+// Put links into an array
+const links = [...document.querySelectorAll("a")];
 
 // Scroll to anchor ID using scrollTO event
 
-function smoothScroll (link, secNumber){
-    
-    link.addEventListener('click', function() {
-        secNumber.scrollIntoView({behavior: "smooth"});
-    });
-    
-};
+// Looping over links array
+for (const link of links) {
+  // Add click event listner to the links
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
 
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
+    // Looping over sections array
+    for (const section of sections) {
+      if (link.innerHTML === section.getAttribute("data-nav")) {
+        // Scroll to sections smoothly on link click
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  });
+}
 
-// Build menu 
+// Add class 'active' to section when near top of viewport
 
-// Scroll to section on link click
+// Create scroll event listener
+window.addEventListener("scroll", () => {
+  // Looping over sections array
+  for (const section of sections) {
+    // Set a variable for the value of the section position
+    const sectionTop = section.getBoundingClientRect().top;
 
-smoothScroll ( document.querySelector("[data-nav='Section 1']"), sec1);
+    // Add active class to sections
+    if (sectionTop >= -200 && sectionTop <= 200) {
+      section.classList.add("your-active-class");
 
-smoothScroll ( document.querySelector("[data-nav='Section 2']"), sec2);
+      // Looping over links array
+      for (const link of links) {
+        // Add active class to links
+        if (link.innerHTML === section.getAttribute("data-nav")) {
+          link.classList.add("active");
+        }
 
-smoothScroll ( document.querySelector("[data-nav='Section 3']"), sec3);
+        // Remove active class from links
+        else {
+          link.classList.remove("active");
+        }
+      }
+    }
 
-smoothScroll ( document.querySelector("[data-nav='Section 4']"), sec4);
-
-
-// Set sections as active
-
-window.addEventListener("scroll", function(){
-
-    const sections = [...document.querySelectorAll('section')];
-    const observer = new IntersectionObserver(callback, options);
-    
-    sections.forEach(function(section){
-        observer.observe(section);
-    });
+    // Remove active class from sections
+    else {
+      section.classList.remove("your-active-class");
+    }
+  }
 });
